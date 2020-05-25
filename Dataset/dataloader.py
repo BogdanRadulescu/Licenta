@@ -9,8 +9,8 @@ import glob
 
 
 cfg = yaml.safe_load(open('config.yml', 'r'))
-#use_cuda = torch.cuda.is_available()
-#device = torch.device("cuda:0" if use_cuda else "cpu")
+use_cuda = torch.cuda.is_available()
+device = torch.device("cuda:0" if use_cuda else "cpu")
 
 def video_to_rgb_array(name: str):
     capture = cv2.VideoCapture(name)
@@ -48,11 +48,19 @@ def get_meta(filename, as_int=True):
 
 class NTUDataset(Dataset):
     def __init__(self, files, transform=None):
+        def process_file(filename):
+            video = video_to_rgb_array(filename)
+            if transform:
+                video = [transform(x) for x in video]
+            video = torch.stack(video).to(device)
+            return video
         self.files = [f for f in files if get_meta(f)[0] <= cfg['max_actions']]
+        #self.videos = [process_file(f) for f in self.files]
         self.transform = transform
 
     def __len__(self):
         return len(self.files)
+    
     
     def __getitem__(self, idx):
         if torch.is_tensor(idx):
@@ -61,7 +69,7 @@ class NTUDataset(Dataset):
         video = video_to_rgb_array(filename)
         if self.transform:
             video = [self.transform(x) for x in video]
-        video = torch.stack(video)
+        video = torch.stack(video).to(device)
         sample = {'frames': video, 'class': int(filename[-11:-8]), 'name': filename}
         return sample
 
@@ -74,15 +82,15 @@ def test_print_generator(generator, max_batch=20):
         if i == max_batch:
             break
 
-preprocessed_path = f'{cfg["preprocessed_path"]}/*/*'
+preprocessed_path = f'{cfg["preprocessed_path_2"]}/*/*'
 raw_path = f'{cfg["dataset_path"]}/*/*'
 
 #all_rgb = glob.glob(raw_path)
 all_rgb = glob.glob(preprocessed_path)
 
 partition = {}
-partition['train'] = [f for f in all_rgb if get_meta(f)[4] in cfg["train_subjects"]]
-partition['test'] = [f for f in all_rgb if get_meta(f)[4] not in cfg["train_subjects"]]
+partition['train'] = [f for f in all_rgb if get_meta(f)[2] in cfg["train_subjects"]]
+partition['test'] = [f for f in all_rgb if get_meta(f)[2] not in cfg["train_subjects"]]
 
 tr = transforms.Compose([
     transforms.ToTensor(),

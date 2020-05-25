@@ -1,5 +1,6 @@
 dataset_path: D:\Fuck\Licenta\Dataset\NTUDataset
 preprocessed_path: D:\Fuck\Licenta\Dataset\NTUDatasetPreprocessed
+preprocessed_path_2: D:\Fuck\Licenta\Dataset\NTUDatasetPreprocessed2
 base_model_path: "D:\\Fuck\\Licenta\\NTU Action Recognition\\Licenta\\Models\\BaseClassifier"
 model_path: "D:\\Fuck\\Licenta\\NTU Action Recognition\\Licenta\\Models\\NTUClassifier"
 train_percent: 10
@@ -7,16 +8,17 @@ train_subjects: [
     1, 2, 4, 5, 8, 9, 13, 14, 15, 16, 17, 18, 19, 25, 27, 28, 31, 34, 35,
     38, 45, 46, 47, 49, 50, 52, 53, 54, 55, 56, 57, 58, 59, 70, 74, 78,
     80, 81, 82, 83, 84, 85, 86, 89, 91, 92, 93, 94, 95, 97, 98, 100, 103
-    ]
+]
 # 4 32
 dataloader_params: {
-    'batch_size': 4,
+    'batch_size': 10,
     'shuffle': True,
-    'num_workers': 2
+    'num_workers': 0,
+    #'pin_memory': True
 }
 max_epochs: 10
-max_frames: 10
-scale_percent: 0.05
-max_actions: 10
-lr: 0.001
+max_frames: 20
+scale_percent: 0.1
+max_actions: 60
+lr: 1.0e-6
 momentum: 0.9
