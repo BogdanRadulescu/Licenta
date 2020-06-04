@@ -16,9 +16,9 @@ dataloader_params: {
     'num_workers': 0,
     #'pin_memory': True
 }
-max_epochs: 10
+max_epochs: 4
 max_frames: 20
 scale_percent: 0.1
 max_actions: 60
-lr: 1.0e-6
+lr: 1.0e-4
 momentum: 0.9

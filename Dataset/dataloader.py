@@ -94,7 +94,7 @@ partition['test'] = [f for f in all_rgb if get_meta(f)[2] not in cfg["train_subj
 
 tr = transforms.Compose([
     transforms.ToTensor(),
-    transforms.Normalize((0.4, 0.4, 0.4), (0.4, 0.4, 0.4))
+    transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
 ])
 
 test_dataset = NTUDataset(partition['test'], tr)

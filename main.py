@@ -34,14 +34,14 @@ def train_and_save_model(model: torch.nn.Module, optimizer, path, display=True):
             y = torch.tensor(y).to(device)
 
             optimizer.zero_grad()
-            try:
-                y_pred = model(X)
-            except:
-                print('ERROR: Something occured, skipping data')
-                names = [x[-28:] for x in items['name']]
-                print(names)
-                continue
-            #print(y_pred.size(), X.size(), y.size())
+            y_pred = model(X)
+            # try:
+            #     y_pred = model(X)
+            # except:
+            #     print('ERROR: Something occured, skipping data')
+            #     names = [x[-28:] for x in items['name']]
+            #     print(names)
+            #     continue
             loss = criterion(y_pred, y)
             loss.backward()
             optimizer.step()
@@ -95,17 +95,11 @@ def train_and_test_model(ModelClass: torch.nn.Module, basePath, additional_name_
     return model.name, running_loss, accuracy
 
 def main():
-    
-    name, running_loss, accuracy = None, None, None
-    #name, running_loss, accuracy = train_and_test_model(NNModelBase, cfg['base_model_path'], '_60_af_01', train=True, should_load_model=False)
-    #print(name, running_loss, accuracy)
-    #name, running_loss, accuracy = train_and_test_model(NNModel, cfg['model_path'], '_d2_sl_00', train=True, should_load_model=True)
-    #train_and_test_model(TCNModelConv3d, cfg['model_path'], '_00', train=True, should_load_model=True)
-    train_and_test_model(BestTCNModelConv3d, cfg['model_path'], '_00', train=True, should_load_model=True)
+    #train_and_test_model(NNModelBase, cfg['base_model_path'], 'baseline', train=True, should_load_model=True)
+    #train_and_test_model(NNModel, cfg['model_path'], '_d2_sl_00', train=True, should_load_model=True)
+    train_and_test_model(TCNModelConv3d, cfg['model_path'], '_00', train=True, should_load_model=True)
+    #train_and_test_model(BestTCNModelConv3d, cfg['model_path'], '_00', train=True, should_load_model=True)
     #train_and_test_model(TCNModelConv1d, cfg['model_path'], '_00', train=True, should_load_model=True)
-    #print(name, running_loss, accuracy)
-    #test_print_generator(train_generator)
-
 
 if __name__ == '__main__':
     main()

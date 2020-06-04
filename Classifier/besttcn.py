@@ -75,11 +75,11 @@ class BestTCNModelConv3d(nn.Module):
             self.bn3 = nn.BatchNorm3d(24)
 
             self.unit4 = UnitTCN(24, 36, kernel_size=(5, 5, 5), stride=1)
-            self.unit4_1 = UnitTCN(36, 36, kernel_size=(5, 3, 7), stride=1)
+            self.unit4_1 = UnitTCN(36, 36, kernel_size=(5, 5, 5), stride=1)
             self.bn4 = nn.BatchNorm3d(36)
 
             self.unit5 = UnitTCN(36, 48, kernel_size=(5, 3, 5), stride=1)
-            self.unit5_1 = UnitTCN(48, 48, kernel_size=(5, 5, 7), stride=1)
+            self.unit5_1 = UnitTCN(48, 48, kernel_size=(5, 3, 5), stride=1)
             self.bn5 = nn.BatchNorm3d(48)
 
             self.unit6 = UnitTCN(48, 72, kernel_size=(3, 3, 3), stride=1)
