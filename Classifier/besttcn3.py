@@ -46,7 +46,7 @@ class UnitTCN(nn.Module):
 
         if in_channel != out_channel:
             # kernel 1 -> version 01; kernel 3 -> version 00
-            self.down1 = UnitConv(in_channel, out_channel, kernel_size=1, stride=stride, d_in=d_in)
+            self.down1 = UnitConv(in_channel, out_channel, kernel_size=3, stride=stride, d_in=d_in)
         else:
             self.down1 = None
 
@@ -54,10 +54,10 @@ class UnitTCN(nn.Module):
         x = self.unit1_1(x) + (x if self.down1 is None else self.down1(x))
         return x
 
-class TCNModelConv3d(nn.Module):
+class BestTCNModelConv3d3(nn.Module):
         def __init__(self, device):
-            super(TCNModelConv3d, self).__init__()
-            self.name = 'TCNModelConv3d'
+            super(BestTCNModelConv3d3, self).__init__()
+            self.name = 'besttnc3'
             self.device = device
             self.input_size = 20 * 108 * 192
             self.batch_dim = 10

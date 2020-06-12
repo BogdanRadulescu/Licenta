@@ -3,7 +3,7 @@ from Classifier.baseline import *
 from Classifier.model import *
 from Classifier.tcnmodel2 import TCNModelConv3d
 from Classifier.tcnmodel import TCNModelConv1d
-from Classifier.besttcn import BestTCNModelConv3d
+from Classifier.besttcn3 import BestTCNModelConv3d3
 import glob
 from time import sleep
 import psutil
@@ -95,10 +95,11 @@ def train_and_test_model(ModelClass: torch.nn.Module, basePath, additional_name_
     return model.name, running_loss, accuracy
 
 def main():
-    #train_and_test_model(NNModelBase, cfg['base_model_path'], 'baseline', train=True, should_load_model=True)
-    #train_and_test_model(NNModel, cfg['model_path'], '_d2_sl_00', train=True, should_load_model=True)
-    train_and_test_model(TCNModelConv3d, cfg['model_path'], '_00', train=True, should_load_model=True)
-    #train_and_test_model(BestTCNModelConv3d, cfg['model_path'], '_00', train=True, should_load_model=True)
+    #train_and_test_model(NNModelBase, cfg['base_model_path'], 'baseline_1', train=True, should_load_model=True)
+    #train_and_test_model(NNModel, cfg['model_path'], '_00_cv', train=True, should_load_model=True)
+    train_and_test_model(BestTCNModelConv3d3, cfg['model_path'], '_00_cv', train=True, should_load_model=True)
+
+    #train_and_test_model(TCNModelConv3d, cfg['model_path'], '_01', train=True, should_load_model=False)
     #train_and_test_model(TCNModelConv1d, cfg['model_path'], '_00', train=True, should_load_model=True)
 
 if __name__ == '__main__':

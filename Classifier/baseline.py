@@ -86,25 +86,24 @@ class NNModelBase(nn.Module):
         x = self.bn9(F.relu(self.conv9_1(x)))
 
         x = x.view(1, -1)
-
         x = F.relu(self.fc1(x))
         x = F.relu(self.fc2(x))
         x = self.fc3(x)
         return x
     
     def forward(self, X: torch.Tensor):
-        if self.single_frame:
-            n = int(len(X) / 2)
-            res = X[n].unsqueeze(0)
-            return self.predict_img(res)
-
         all_predictions = []
-        for sample in X:
-            predicted = torch.zeros(size=(1, 60)).to(self.device)
-            for img in sample:
-                k = self.predict_img(img.unsqueeze(0))
-                predicted += k
-            predicted = torch.div(predicted, 20)
-            all_predictions.append(predicted.squeeze(0))
+        if self.single_frame:
+            for sample in X:
+                res = self.predict_img(sample[10].unsqueeze(0))
+                all_predictions.append(res.squeeze(0))
+        else:
+            for sample in X:
+                predicted = torch.zeros(size=(1, 60)).to(self.device)
+                for img in sample:
+                    k = self.predict_img(img.unsqueeze(0))
+                    predicted += k
+                predicted = torch.div(predicted, 20)
+                all_predictions.append(predicted.squeeze(0))
         all_predictions = torch.stack(all_predictions).to(self.device)
         return all_predictions

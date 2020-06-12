@@ -91,14 +91,17 @@ all_rgb = glob.glob(preprocessed_path)
 partition = {}
 partition['train'] = [f for f in all_rgb if get_meta(f)[2] in cfg["train_subjects"]]
 partition['test'] = [f for f in all_rgb if get_meta(f)[2] not in cfg["train_subjects"]]
+cv_partition = {}
+cv_partition['train'] = [f for f in all_rgb if get_meta(f)[3] in cfg["train_cameras"]]
+cv_partition['test'] = [f for f in all_rgb if get_meta(f)[3] not in cfg["train_cameras"]]
 
 tr = transforms.Compose([
     transforms.ToTensor(),
     transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
 ])
 
-test_dataset = NTUDataset(partition['test'], tr)
-train_dataset = NTUDataset(partition['train'], tr)
+test_dataset = NTUDataset(cv_partition['test'], tr)
+train_dataset = NTUDataset(cv_partition['train'], tr)
 
 train_generator = DataLoader(train_dataset, **cfg['dataloader_params'])
 test_generator = DataLoader(test_dataset, **cfg['dataloader_params'])
