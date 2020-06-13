@@ -16,6 +16,12 @@ import os
 criterion = nn.CrossEntropyLoss().cuda()
 cfg = yaml.safe_load(open('config.yml', 'r'))
 
+def save_matrix(matrix, filename):
+    file = open(filename, 'w')
+    for line in matrix:
+        file.write(' '.join(map(lambda x: str(x), line)) + '\n')
+    file.close()
+
 def load_model(ModelClass: torch.nn.Module, path) -> torch.nn.Module:
     model = ModelClass(device)
     if os.path.exists(path):
@@ -56,6 +62,7 @@ def train_and_save_model(model: torch.nn.Module, optimizer, path, display=True):
     return global_running_loss
 
 def load_and_test_model(ModelClass: torch.nn.Module, path, display=True, once_every=20):
+    confusion_matrix = [[0 for i in range(cfg['max_actions'])] for j in range(cfg['max_actions'])]
     model = ModelClass(device)
     model.load_state_dict(torch.load(path))
     model.eval()
@@ -75,8 +82,10 @@ def load_and_test_model(ModelClass: torch.nn.Module, path, display=True, once_ev
             for j in range(len(y)):
                 total += 1
                 correct += (int(predicted[j]) == int(y[j]))
+                confusion_matrix[int(predicted[j])][int(y[j])] += 1
             if i % once_every == once_every - 1:
                 print(f'[{i + 1}]: Partial accuracy: {100 * correct / total}')
+                save_matrix(confusion_matrix, model.name + '_matrix')
     if display:
         print('Accuracy: %d %%' % (100 * correct / total))
     return correct/total
@@ -96,8 +105,8 @@ def train_and_test_model(ModelClass: torch.nn.Module, basePath, additional_name_
 
 def main():
     #train_and_test_model(NNModelBase, cfg['base_model_path'], 'baseline_1', train=True, should_load_model=True)
-    #train_and_test_model(NNModel, cfg['model_path'], '_00_cv', train=True, should_load_model=True)
-    train_and_test_model(BestTCNModelConv3d3, cfg['model_path'], '_00_cv', train=True, should_load_model=True)
+    train_and_test_model(NNModel, cfg['model_path'], '_00_cv', train=True, should_load_model=True)
+    #train_and_test_model(BestTCNModelConv3d3, cfg['model_path'], '_00_cv', train=False, should_load_model=True)
 
     #train_and_test_model(TCNModelConv3d, cfg['model_path'], '_01', train=True, should_load_model=False)
     #train_and_test_model(TCNModelConv1d, cfg['model_path'], '_00', train=True, should_load_model=True)
