@@ -9,6 +9,9 @@ train_subjects: [
     38, 45, 46, 47, 49, 50, 52, 53, 54, 55, 56, 57, 58, 59, 70, 74, 78,
     80, 81, 82, 83, 84, 85, 86, 89, 91, 92, 93, 94, 95, 97, 98, 100, 103
 ]
+illegal_actions: [1, 3, 10, 11, 12, 29, 30, 31, 32, 34, 44, 45, 46, 47, 49]
+#illegal_actions: [2, 3, 10, 11, 22, 29, 30, 34, 35, 47]
+#illegal_actions: []
 train_cameras: [2, 3]
 # 4 32
 dataloader_params: {
@@ -21,5 +24,6 @@ max_epochs: 10
 max_frames: 20
 scale_percent: 0.1
 max_actions: 60
-lr: 1.0e-4
+weight_decay: 5.0e-4
+lr: 1.0e-5
 momentum: 0.9

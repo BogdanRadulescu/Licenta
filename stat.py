@@ -1,20 +1,17 @@
-from Dataset.dataloader import device
-from Classifier.baseline import *
-from Classifier.model import *
-from Classifier.besttcn3 import BestTCNModelConv3d3
 import yaml
 
 cfg = yaml.safe_load(open('config.yml', 'r'))
-# model = NNModelBase(device)
-# model = NNModel(device)
-model = BestTCNModelConv3d3(device)
-filename = f'{model.name}_matrix_cv'
 C = cfg['max_actions']
+#model_name = 'Baseline'
+#model_name = 'NTU_RGB_Classifier'
+model_name = 'besttnc3'
+filename = model_name + '_matrix'# + '_cv'
 
-# for testing purposes
-#filename = 'test'
-#C = 3
-#matrix = [[i * i + j + 1 for i in range(C)] for j in range(C)]
+actions = [i+1 for i in range(60) if i+1 not in cfg['illegal_actions']]
+# actions.index(y[i]) == y_pred[i]
+# [actions.index(x) for x in items['class']]
+print(actions)
+print(actions.index(60))
 
 def print_matrix(matrix):
     for i in range(C):
@@ -46,7 +43,10 @@ def compute_precision(matrix):
             if i == j:
                 precision[i] += matrix[i][j]
             total += matrix[i][j]
-        precision[i] /= total
+        if total == 0:
+            precision[i] = -1
+        else:
+            precision[i] /= total
     return precision
 
 def compute_recall(matrix):
@@ -57,7 +57,10 @@ def compute_recall(matrix):
             if i == j:
                 recall[i] += matrix[i][j]
             total += matrix[j][i]
-        recall[i] /= total
+        if total == 0:
+            recall[i] = -1
+        else:
+            recall[i] /= total
     return recall
 
 def restore_matrix(filename):
@@ -67,17 +70,27 @@ def restore_matrix(filename):
     return matrix
 
 def compute_top(results, k, reverse):
-    arr = [(i, results[i]) for i in range(len(results))]
+    arr = [(i+1, results[i]) for i in range(len(results))]
     arr.sort(reverse=reverse, key=lambda x: x[1])
-    return arr[:k]
+    i = 0
+    while arr[i][1] == -1:
+        i += 1
+    return arr[i:i+k]
 
-matrix = restore_matrix(filename)
-print(compute_accuracy(matrix))
-precision = compute_precision(matrix)
-recall = compute_recall(matrix)
-print('Precision')
-print(compute_top(precision, 5, False))
-print(compute_top(precision, 5, True))
-print('Recall')
-print(compute_top(recall, 5, False))
-print(compute_top(recall, 5, True))
+def checksum(matrix):
+    total = 0
+    for x in matrix:
+        total += sum(x)
+    return total
+
+# matrix = restore_matrix(filename)
+# print(f'Checksum {checksum(matrix)}')
+# print(compute_accuracy(matrix))
+# precision = compute_precision(matrix)
+# recall = compute_recall(matrix)
+# print('Precision')
+# print(compute_top(precision, 5, False))
+# print(compute_top(precision, 5, True))
+# print('Recall')
+# print(compute_top(recall, 5, False))
+# print(compute_top(recall, 5, True))

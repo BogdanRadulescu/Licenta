@@ -92,7 +92,8 @@ class BestTCNModelConv3d3(nn.Module):
 
             self.fc1 = nn.Linear(6912, 1024)
             self.fc2 = nn.Linear(1024, 256)
-            self.fc3 = nn.Linear(256, 60)
+            #self.fc3 = nn.Linear(256, 60)
+            self.fc3 = nn.Linear(256, 45)
 
         def predict(self, x):
             x = self.unit0(x)
