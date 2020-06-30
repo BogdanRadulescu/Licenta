@@ -91,7 +91,7 @@ def load_and_test_model(ModelClass: torch.nn.Module, path, display=True, once_ev
                 confusion_matrix[int(predicted[j])][int(y[j])] += 1
             if i % once_every == once_every - 1:
                 print(f'[{i + 1}]: Partial accuracy: {100 * correct / total}')
-                save_matrix(confusion_matrix, model.name + '_matrix_reduced')
+                save_matrix(confusion_matrix, model.name + '_matrix_cv_reduced')
     if display:
         print('Accuracy: %d %%' % (100 * correct / total))
     return correct/total
@@ -111,7 +111,7 @@ def train_and_test_model(ModelClass: torch.nn.Module, basePath, additional_name_
 def main():
     # train_and_test_model(NNModelBase, cfg['base_model_path'], 'baseline_1', train=False, should_load_model=True)
     # train_and_test_model(NNModel, cfg['model_path'], '_00', train=False, should_load_model=True)
-    train_and_test_model(BestTCNModelConv3d3, cfg['model_path'], '_00_reduced', train=True, should_load_model=True)
+    train_and_test_model(BestTCNModelConv3d3, cfg['model_path'], '_00_cv_reduced', train=False, should_load_model=True)
 
     #train_and_test_model(TCNModelConv3d, cfg['model_path'], '_01', train=True, should_load_model=False)
     #train_and_test_model(TCNModelConv1d, cfg['model_path'], '_00', train=True, should_load_model=True)

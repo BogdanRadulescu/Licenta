@@ -92,8 +92,8 @@ class BestTCNModelConv3d3(nn.Module):
 
             self.fc1 = nn.Linear(6912, 1024)
             self.fc2 = nn.Linear(1024, 256)
-            #self.fc3 = nn.Linear(256, 60)
-            self.fc3 = nn.Linear(256, 45)
+            self.fc3 = nn.Linear(256, 60)
+            #self.fc3 = nn.Linear(256, 45)
 
         def predict(self, x):
             x = self.unit0(x)
@@ -121,7 +121,7 @@ class BestTCNModelConv3d3(nn.Module):
             x = F.avg_pool3d(self.unit8(x), kernel_size=(2, 1, 2)) #2x6x6
             x = self.unit8_1(x)
 
-            x = x.view(10, -1)
+            x = x.view(1, -1)
             x = self.fcdrop(F.leaky_relu(self.fc1(x)))
             x = self.fcdrop(F.leaky_relu(self.fc2(x)))
             x = self.fc3(x)

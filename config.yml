@@ -9,13 +9,14 @@ train_subjects: [
     38, 45, 46, 47, 49, 50, 52, 53, 54, 55, 56, 57, 58, 59, 70, 74, 78,
     80, 81, 82, 83, 84, 85, 86, 89, 91, 92, 93, 94, 95, 97, 98, 100, 103
 ]
+demo_path: D:\Fuck\Licenta\Dataset\Demo\*
 illegal_actions: [1, 3, 10, 11, 12, 29, 30, 31, 32, 34, 44, 45, 46, 47, 49]
 #illegal_actions: [2, 3, 10, 11, 22, 29, 30, 34, 35, 47]
 #illegal_actions: []
 train_cameras: [2, 3]
 # 4 32
 dataloader_params: {
-    'batch_size': 10,
+    'batch_size': 1,
     'shuffle': True,
     'num_workers': 0,
     #'pin_memory': True
@@ -25,5 +26,67 @@ max_frames: 20
 scale_percent: 0.1
 max_actions: 60
 weight_decay: 5.0e-4
-lr: 1.0e-5
+lr: 5.0e-6
 momentum: 0.9
+
+actions:
+    1: "Drink water"
+    2: "Eat meal"
+    3: "Brush teeth"
+    4: "Brush hair"
+    5: "Drop"
+    6: "Pick up"
+    7: "Throw"
+    8: "Sit down"
+    9: "Stand up"
+    10: "Clapping"
+    11: "Reading"
+    12: "Writing"
+    13: "Tear up paper"
+    14: "Put on jacket"
+    15: "Take off jacket"
+    16: "Put on shoe"
+    17: "Take off shoe"
+    18: "Put on glasses"
+    19: "Take off glasses"
+    20: "Put on hat/cap"
+    21: "Take off hat/cap"
+    22: "Cheer up"
+    23: "Hand waving"
+    24: "Kicking something"
+    25: "Reach into pocket"
+    26: "Hopping"
+    27: "Jump up"
+    28: "Phone call"
+    29: "Play with phone/tablet"
+    30: "Type on keyboard"
+    31: "Point to something"
+    32: "Take a selfie"
+    33: "Check time (from watch)"
+    34: "Rub two hands"
+    35: "Nod head/bow"
+    36: "Shake head"
+    37: "Wipe face"
+    38: "Salute"
+    39: "Put palms together"
+    40: "Cross hands in front"
+    41: "Sneeze/cough"
+    42: "Staggering"
+    43: "Falling down"
+    44: "Headache"
+    45: "Chest pain"
+    46: "Back pain"
+    47: "Neck pain"
+    48: "Nausea/Vomiting"
+    49: "Fan self"
+    50: "Punch/slap"
+    51: "Kicking"
+    52: "Pushing"
+    53: "Pat on back"
+    54: "Point finger"
+    55: "Hugging"
+    56: "Giving object"
+    57: "Touch pocket"
+    58: "Shaking hands"
+    59: "Walking towards"
+    60: "Walking apart"

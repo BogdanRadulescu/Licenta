@@ -48,19 +48,11 @@ def get_meta(filename, as_int=True):
 
 class NTUDataset(Dataset):
     def __init__(self, files, transform=None):
-        def process_file(filename):
-            video = video_to_rgb_array(filename)
-            if transform:
-                video = [transform(x) for x in video]
-            video = torch.stack(video).to(device)
-            return video
-        self.files = [f for f in files if get_meta(f)[0] <= cfg['max_actions']]
-        #self.videos = [process_file(f) for f in self.files]
+        self.files = files
         self.transform = transform
 
     def __len__(self):
         return len(self.files)
-    
     
     def __getitem__(self, idx):
         if torch.is_tensor(idx):
@@ -82,34 +74,34 @@ def test_print_generator(generator, max_batch=20):
         if i == max_batch:
             break
 
-preprocessed_path = f'{cfg["preprocessed_path_2"]}/*/*'
-raw_path = f'{cfg["dataset_path"]}/*/*'
+# preprocessed_path = f'{cfg["preprocessed_path_2"]}/*/*'
+# raw_path = f'{cfg["dataset_path"]}/*/*'
 
-#all_rgb = glob.glob(raw_path)
-all_rgb = glob.glob(preprocessed_path)
+# #all_rgb = glob.glob(raw_path)
+# all_rgb = glob.glob(preprocessed_path)
 
-partition = {}
-partition['train'] = [f for f in all_rgb if get_meta(f)[2] in cfg["train_subjects"]]
-partition['test'] = [f for f in all_rgb if get_meta(f)[2] not in cfg["train_subjects"]]
-cv_partition = {}
-cv_partition['train'] = [f for f in all_rgb if get_meta(f)[3] in cfg["train_cameras"]]
-cv_partition['test'] = [f for f in all_rgb if get_meta(f)[3] not in cfg["train_cameras"]]
+# partition = {}
+# partition['train'] = [f for f in all_rgb if get_meta(f)[2] in cfg["train_subjects"]]
+# partition['test'] = [f for f in all_rgb if get_meta(f)[2] not in cfg["train_subjects"]]
+# cv_partition = {}
+# cv_partition['train'] = [f for f in all_rgb if get_meta(f)[3] in cfg["train_cameras"]]
+# cv_partition['test'] = [f for f in all_rgb if get_meta(f)[3] not in cfg["train_cameras"]]
 
-partition_reduced = {}
-partition_reduced['train'] = [f for f in partition['train'] if get_meta(f)[0] not in cfg["illegal_actions"]]
-partition_reduced['test'] = [f for f in partition['test'] if get_meta(f)[0] not in cfg["illegal_actions"]]
+# partition_reduced = {}
+# partition_reduced['train'] = [f for f in partition['train'] if get_meta(f)[0] not in cfg["illegal_actions"]]
+# partition_reduced['test'] = [f for f in partition['test'] if get_meta(f)[0] not in cfg["illegal_actions"]]
 
-cv_partition_reduced = {}
-cv_partition_reduced['train'] = [f for f in cv_partition['train'] if get_meta(f)[0] not in cfg["illegal_actions"]]
-cv_partition_reduced['test'] = [f for f in cv_partition['test'] if get_meta(f)[0] not in cfg["illegal_actions"]]
+# cv_partition_reduced = {}
+# cv_partition_reduced['train'] = [f for f in cv_partition['train'] if get_meta(f)[0] not in cfg["illegal_actions"]]
+# cv_partition_reduced['test'] = [f for f in cv_partition['test'] if get_meta(f)[0] not in cfg["illegal_actions"]]
 
 tr = transforms.Compose([
     transforms.ToTensor(),
     transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
 ])
 
-test_dataset = NTUDataset(partition_reduced['test'], tr)
-train_dataset = NTUDataset(partition_reduced['train'], tr)
+# test_dataset = NTUDataset(cv_partition_reduced['test'], tr)
+# train_dataset = NTUDataset(cv_partition_reduced['train'], tr)
 
-train_generator = DataLoader(train_dataset, **cfg['dataloader_params'])
-test_generator = DataLoader(test_dataset, **cfg['dataloader_params'])
+# train_generator = DataLoader(train_dataset, **cfg['dataloader_params'])
+# test_generator = DataLoader(test_dataset, **cfg['dataloader_params'])

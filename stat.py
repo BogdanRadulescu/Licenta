@@ -5,13 +5,12 @@ C = cfg['max_actions']
 #model_name = 'Baseline'
 #model_name = 'NTU_RGB_Classifier'
 model_name = 'besttnc3'
-filename = model_name + '_matrix'# + '_cv'
+filename = model_name + '_matrix' + '_cv'
+filename += '_reduced'
 
 actions = [i+1 for i in range(60) if i+1 not in cfg['illegal_actions']]
 # actions.index(y[i]) == y_pred[i]
 # [actions.index(x) for x in items['class']]
-print(actions)
-print(actions.index(60))
 
 def print_matrix(matrix):
     for i in range(C):
@@ -83,14 +82,14 @@ def checksum(matrix):
         total += sum(x)
     return total
 
-# matrix = restore_matrix(filename)
-# print(f'Checksum {checksum(matrix)}')
-# print(compute_accuracy(matrix))
-# precision = compute_precision(matrix)
-# recall = compute_recall(matrix)
-# print('Precision')
-# print(compute_top(precision, 5, False))
-# print(compute_top(precision, 5, True))
-# print('Recall')
-# print(compute_top(recall, 5, False))
-# print(compute_top(recall, 5, True))
+matrix = restore_matrix(filename)
+print(f'Checksum {checksum(matrix)}')
+print(compute_accuracy(matrix))
+precision = compute_precision(matrix)
+recall = compute_recall(matrix)
+print('Precision')
+print(compute_top(precision, 5, False))
+print(compute_top(precision, 5, True))
+print('Recall')
+print(compute_top(recall, 5, False))
+print(compute_top(recall, 5, True))
