@@ -65,5 +65,14 @@ with torch.no_grad():
         y = int(items['class'][0].data)
         outputs = model(X)
         predicted = int([torch.argmax(x) for x in outputs.data][0].data) + 1
-        print(items['name'][0])
+        print(items['name'][0][-28:])
         print(f'"{t[y]}" was predicted as "{t[predicted]}"!\n')
+
+# Prezice FOARTE BINE: Clase cu mișcări complexe, distincte
+# Uneori încurcă: Clase cu mișcări mici, simple, repetitive
+
+# print(torch.cuda.memory_cached())
+# print(torch.cuda.max_memory_cached())
+# print(torch.cuda.memory_allocated())
+# print(torch.cuda.max_memory_allocated())
+print(torch.cuda.memory_summary(device))
