@@ -4,6 +4,7 @@ from Classifier.model import *
 from Classifier.tcnmodel2 import TCNModelConv3d
 from Classifier.tcnmodel import TCNModelConv1d
 from Classifier.besttcn3 import BestTCNModelConv3d3
+from Classifier.tcn120model import TCN120Model1
 import glob
 from time import sleep
 import psutil
@@ -15,7 +16,7 @@ import os
 
 criterion = nn.CrossEntropyLoss().cuda()
 cfg = yaml.safe_load(open('config.yml', 'r'))
-actions = [i+1 for i in range(60) if i+1 not in cfg['illegal_actions']]
+actions = [i+1 for i in range(120) if i+1 not in cfg['illegal_actions']]
 
 def save_matrix(matrix, filename):
     file = open(filename, 'w')
@@ -57,9 +58,6 @@ def train_and_save_model(model: torch.nn.Module, optimizer, path, display=True):
             if display and i % once_every == once_every - 1:
                 print('[e %d, b %5d] loss: %.3f, (p: %d, a: %d)' % (epoch + 1, i + 1, running_loss, int(torch.argmax(y_pred[0].data)), int(y[0])))
                 print(f'[{i + 1}]: Partial accuracy: {100 * correct / total}')
-                #print(predicted[:10])
-                #print('============')
-                #print(y[:10])
                 global_running_loss += running_loss
                 running_loss = 0.0
                 total = 0
@@ -109,12 +107,8 @@ def train_and_test_model(ModelClass: torch.nn.Module, basePath, additional_name_
     return model.name, accuracy
 
 def main():
-    # train_and_test_model(NNModelBase, cfg['base_model_path'], 'baseline_1', train=False, should_load_model=True)
-    # train_and_test_model(NNModel, cfg['model_path'], '_00', train=False, should_load_model=True)
-    train_and_test_model(BestTCNModelConv3d3, cfg['model_path'], '_00_cv_reduced', train=False, should_load_model=True)
-
-    #train_and_test_model(TCNModelConv3d, cfg['model_path'], '_01', train=True, should_load_model=False)
-    #train_and_test_model(TCNModelConv1d, cfg['model_path'], '_00', train=True, should_load_model=True)
+    #train_and_test_model(TCN120Model1, cfg['model_path'], '_120_00', train=True, should_load_model=False)
+    train_and_test_model(TCN120Model1, cfg['model_path'], '_120_01', train=True, should_load_model=True)
 
 if __name__ == '__main__':
     main()

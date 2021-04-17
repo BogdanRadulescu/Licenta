@@ -74,18 +74,18 @@ def test_print_generator(generator, max_batch=20):
         if i == max_batch:
             break
 
-# preprocessed_path = f'{cfg["preprocessed_path_2"]}/*/*'
+preprocessed_path = f'{cfg["preprocessed_path_2"]}/*/*'
 # raw_path = f'{cfg["dataset_path"]}/*/*'
 
 # #all_rgb = glob.glob(raw_path)
-# all_rgb = glob.glob(preprocessed_path)
+all_rgb = glob.glob(preprocessed_path)
 
-# partition = {}
-# partition['train'] = [f for f in all_rgb if get_meta(f)[2] in cfg["train_subjects"]]
-# partition['test'] = [f for f in all_rgb if get_meta(f)[2] not in cfg["train_subjects"]]
-# cv_partition = {}
-# cv_partition['train'] = [f for f in all_rgb if get_meta(f)[3] in cfg["train_cameras"]]
-# cv_partition['test'] = [f for f in all_rgb if get_meta(f)[3] not in cfg["train_cameras"]]
+partition = {}
+partition['train'] = [f for f in all_rgb if get_meta(f)[2] in cfg["train_subjects"]]
+partition['test'] = [f for f in all_rgb if get_meta(f)[2] not in cfg["train_subjects"]]
+cv_partition = {}
+cv_partition['train'] = [f for f in all_rgb if get_meta(f)[3] in cfg["train_cameras"]]
+cv_partition['test'] = [f for f in all_rgb if get_meta(f)[3] not in cfg["train_cameras"]]
 
 # partition_reduced = {}
 # partition_reduced['train'] = [f for f in partition['train'] if get_meta(f)[0] not in cfg["illegal_actions"]]
@@ -100,8 +100,8 @@ tr = transforms.Compose([
     transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
 ])
 
-# test_dataset = NTUDataset(cv_partition_reduced['test'], tr)
-# train_dataset = NTUDataset(cv_partition_reduced['train'], tr)
+test_dataset = NTUDataset(partition['test'], tr)
+train_dataset = NTUDataset(partition['train'], tr)
 
-# train_generator = DataLoader(train_dataset, **cfg['dataloader_params'])
-# test_generator = DataLoader(test_dataset, **cfg['dataloader_params'])
+train_generator = DataLoader(train_dataset, **cfg['dataloader_params'])
+test_generator = DataLoader(test_dataset, **cfg['dataloader_params'])
